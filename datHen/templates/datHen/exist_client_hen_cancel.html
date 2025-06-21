@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block heading %}
+<div class="container text-center my-4">
+    <h1 class="display-5 fw-bold">Reschedule Your Appointment or <span class="text-danger">Cancel</span></h1>
+</div>
+{% endblock heading %}
+
+{% block content %}
+<div class="container my-5">
+    {% if submitted and not khach %}
+    <div class="alert alert-danger text-center" role="alert">
+        No client found with the provided name and phone number.
+        <a href="{% url 'datHen:first_step' %}" class="btn btn-primary ms-2">Go here</a>
+    </div>
+    {% endif %}
+
+    {% if khach %}
+    {% for mot in khach.all %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title text-success mb-3">Hello, {{ mot.full_name }}!</h5>
+            <p class="card-text">What would you like to do?</p>
+            <div class="d-flex flex-column flex-md-row flex-wrap gap-3">
+                <a href="{{ mot.get_absolute_url }}" class="btn btn-outline-primary btn-lg shadow-sm w-100 w-md-auto">
+                    <i class="bi bi-calendar-event me-2"></i> New Schedule
+                </a>
+                {% if mot.future_visit %}
+                <a href="{{ mot.get_cancel_url }}" class="btn btn-outline-danger btn-lg shadow-sm w-100 w-md-auto">
+                    <i class="bi bi-x-circle me-2"></i> Cancel Appointment
+                </a>
+                {% endif %}
+                <a href="{% url 'ledger:iam_here' mot.pk %}" class="btn btn-outline-success btn-lg shadow-sm w-100 w-md-auto">
+                    <i class="bi bi-geo-alt-fill me-2"></i> Visit My Spa
+                </a>
+                <a href="{{ mot.get_chat_url }}" class="btn btn-outline-primary btn-lg shadow-sm w-100 w-md-auto">
+                    <i class="bi bi-chat-dots me-2"></i> Leave Feedback
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-12">
+            <h4 class="text-info mb-4">Please Fill Out the Form</h4>
+            <form action="" method="get" class="p-4 bg-light rounded shadow-sm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ formDatHen | crispy }}
+                </div>
+                <div class="d-flex flex-column flex-md-row gap-3">
+                    <button type="submit" class="btn btn-info flex-fill">Find</button>
+                    <button type="button" onclick="window.location='{% url 'ledger:index' %}';" class="btn btn-secondary flex-fill">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Custom styles for better mobile spacing */
+@media (max-width: 767px) {
+    .btn-lg {
+        padding: 0.75rem 1rem; /* Larger touch targets */
+        font-size: 1rem; /* Slightly smaller font for mobile */
+        margin-bottom: 0.75rem; /* Extra spacing between stacked buttons */
+    }
+    .d-flex.gap-3 {
+        gap: 1rem; /* Consistent gap for mobile */
+    }
+}
+@media (min-width: 768px) {
+    .w-md-auto {
+        width: auto !important; /* Ensure buttons don't stretch on larger screens */
+    }
+}
+</style>
+{% endblock content %}

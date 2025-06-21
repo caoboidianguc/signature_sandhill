@@ -1,0 +1,34 @@
+
+div.container_tech {
+    height: auto;
+    text-align: top;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  
+  div.container_tech #tech {
+    display: inline-block;
+    text-align: top;
+    padding: 1px;
+    text-decoration: none;
+  }
+  div.card {
+    margin: 2px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+
+    height: auto;
+    text-align: center;
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  div.card-body {
+    padding: 1px;
+    text-align: center;
+    overflow: auto;
+    white-space: nowrap;
+}
+

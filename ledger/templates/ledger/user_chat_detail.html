@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load humanize %}
+{% load static %}
+
+{% block heading %}
+<h1>Chat Room Greeting to {{ user.username }}</h1>
+{% endblock heading %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Main Chat -->
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-1">{{ chat.text }}</h5>
+                    <div class="d-flex align-items-center text-muted small mt-2">
+                        <span class="ms-3">
+                            <i class="bi bi-bar-chart me-1"></i>{{ chat.view_count }}
+                        </span>
+                        <span class="ms-3">
+                            {% if chat.owner == user %}
+                            <span class="badge bg-primary">@Manager</span>
+                            {% else %}
+                            <span class="fw-semibold">{{ chat.client_name }}</span>
+                            {% endif %}
+                        </span>
+                        <span class="ms-auto">
+                            <small>{{ chat.created_at | naturaltime }}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replies -->
+            <h3 class="mb-3">Replies</h3>
+            <div class="alert alert-warning text-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Do not post full client names. Only the first 3 letters should be shown (e.g., {{ chat.nickName }}).
+            </div>
+            {% for reply in replies %}
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="card-body">
+                    <p class="card-text">{{ reply.text }}</p>
+                    <div class="d-flex align-items-center text-muted small mt-2">
+                        <button class="btn btn-sm btn-link text-muted like-button {% if reply.current_owner_like %}text-danger{% endif %}"
+                                data-chat-id="{{ reply.id }}"
+                                data-url="{% url 'ledger:user_chat_like' reply.id %}">
+                            <i class="bi bi-heart-fill me-1"></i><span class="like-count">{{ reply.total_likes }}</span>
+                        </button>
+                        <span class="ms-3">
+                            <i class="bi bi-bar-chart me-1"></i>{{ reply.view_count }}
+                        </span>
+                        <span class="ms-3">
+                            {% if reply.owner == user %}
+                            <span class="badge bg-primary">@Manager</span>
+                            {% else %}
+                            <span class="fw-semibold">{{ reply.client_name }}</span>
+                            {% endif %}
+                        </span>
+                        <span class="ms-auto">
+                            <small>{{ reply.created_at | naturaltime }}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-chat-left-text display-4"></i>
+                <p class="mt-3">No replies yet. Be the first to respond!</p>
+            </div>
+            {% endfor %}
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Add Your Reply</h5>
+                    <form method="post" >
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ chat_form | crispy }}
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-3 w-25">Reply</button>
+                            <a href="{% url 'ledger:user_chat_room' %}" class="btn btn-outline-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/chat.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock content %}
+
+
+{% block footer %}
+    <strong>Feed back make we strong</strong> foundation from 2002
+{% endblock footer %}

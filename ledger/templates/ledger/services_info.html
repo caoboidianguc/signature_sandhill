@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block nutChinh %}
+
+{% endblock nutChinh %}
+
+
+{% block heading %}
+<h1 class="title">{{ category | title }} Info</h1>
+
+{% endblock heading %}
+
+
+{% block content %}
+<div style="display: flex; flex-direction: column; gap: 10px;">
+    {% for service in allServices %}
+        <div class="card" style="width: auto;">
+            <div class="card-body">
+                <h4 class="card-title">{{ service | title }}</h4>
+                <h6 class="card-subtitle mb-2 text-secondary">${{ service.price }}</h6>
+                <div class="card-text">
+                    {{ service.description }}
+                </div>
+                
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<br>
+<a class="btn btn-info w-25" href="{% url 'datHen:first_step' %}">I'm New</a>
+{% endblock content %}
+    

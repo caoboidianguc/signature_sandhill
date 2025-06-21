@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block nutChinh %}
+<a class="nav-link" href="{% url 'ledger:index' %}"><h1 class='title'>Back</h1></a>
+{% endblock nutChinh %}
+{% block heading %}
+    <h1 class='title'>Our technician</h1>
+    
+{% endblock heading %}
+
+
+{% block content %}
+<h1>Please Choose Your Technician</h1>
+<h4>You can pick a technician now (even randomly if you're unsure) and assign the status to 'Anyone' later.</h4>
+    
+<div class="container text-center">
+    <div class="row row-cols-auto">
+        {% for employee in allTech %}
+      <div class="col">
+        <a href="{% url 'datHen:technician_detail_exist' employee.id %}" class="text-decoration-none link-offset-2 link-underline link-underline-opacity-0">
+            {% if employee.picture %}
+                <img src="{{ employee.picture.url }}" alt="{{ employee.name }}" style="width: 120px; height: 120px; object-fit: cover;" id="tech-pic">
+                {% else %}
+                <img src="{{ STATIC_URL }}path/to/default-image.jpg" alt="No Image" style="width: 50px; height: 50px;" id="tech-pic">
+            {% endif %}
+            <div id="tech-name">{{ employee.name | title }} </div>
+        </a>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+  <style type="text/css">
+    #tech-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        padding: 7px;
+    }
+    #tech-pic{
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 20%;
+
+    }
+    #tech-name{
+        margin-top: 5px;
+        font-size: 16px;
+    }
+</style>
+{% endblock content %}
+
+
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

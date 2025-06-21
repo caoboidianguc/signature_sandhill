@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block heading %}
+    <h1>Create Account</h1>
+{% endblock heading %}
+
+
+
+{% block content %}
+<h1>Welcome to Signature</h1>
+<div>
+    <h3>
+        Happy to join
+    </h3>
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="col-md-4 mb-3">
+    {{ form | crispy }}
+    </div>
+    <input type="submit" value="Register">
+    <input type="submit" onclick="window.location='{% url 'ledger:index' %}'; return false; " value="Cancel">
+</form>  
+{% endblock content %}
+    

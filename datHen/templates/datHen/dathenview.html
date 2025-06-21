@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load static %}
+
+{% block nutChinh %}
+        <div class="d-flex flex-row">
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'datHen:schedule_user' %}"><span>Schedule</span></a>
+            </div>
+        </div>
+
+{% endblock nutChinh %}
+{% block time %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        {{ form.date | as_crispy_field }}
+    </div>
+{% endblock time %}
+{% block nutPhu %}
+    <div class="date-navigation">
+        <a href="?date={{ prev_day|date:'Y-m-d' }}" class="btn btn-info">Previous</a>
+            <span class="current-date">{{ selected_date|date:'l' }}</span>
+        <a href="?date={{ next_day|date:'Y-m-d' }}" class="btn btn-info">Next</a>
+    </div>
+{% endblock nutPhu %}
+
+
+
+{% block heading %}
+<link rel="stylesheet" href="{% static 'css/dathenview.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+        const dateInput = document.getElementById('id_date');
+      if (dateInput) {
+        dateInput.addEventListener('change', function() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('date', this.value);
+            window.location.href = url.toString();
+        });
+      }
+      });
+    $(document).ready(function() {
+        setInterval(function() {
+            window.location.reload();
+        }, 712000);
+    });
+  </script>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li {% if message.tags == "success" %} class="text-success fs-5" {% else %} class="text-danger" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock heading %}
+
+{% block content %}
+
+<div class="container_tech">
+    {% for tech in allTech %}
+    <div class="col-md-2 align-text-top" id="tech">
+        <span class="fs-3">
+            <a href="{% url 'ledger:vacation' tech.id %}" class="btn {% if tech.on_vacation %}btn-secondary{% else %}btn-primary{% endif %}" role="button" > {{ tech.name | title }}
+                <span class="text-info fs-5">{% if tech.on_vacation %}Off {% else %}  {{ tech.get_services_today }} </span>{% endif %}
+            </a>
+        </span>
+            {% for khach in tech.clients %}
+                <div class="card" style="width: 14rem; {% if khach.get_done_at < now %} opacity: 0.65; {% endif %}" id="client_{{ khach }}">
+                    <a tabindex="0" class="btn btn-lg" role="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-title="{{ khach.client.phone_formatted }}" data-bs-html="true" data-bs-content='<div><a href="{{ khach.get_cancel_url }}" class="btn btn-danger" role="button" >Remove Appoinment</a><p>Tag: {{ khach.client.tag | default:"" }}</p><a href="{{ khach.get_visit_detail_url }}" class="btn btn-primary" role="button" >Detail</a><p>{{ khach.client.desc | default:""}}</p></div>'>
+                        <div class="card-body">
+                            <h5 class="card-title text-info">{{ khach }}</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">Start: <span class="fs-5">{{ khach.time_at }}</span></h6>
+                            <p class="card-text">
+                                <span class="badge {% if khach.status == "Anyone" %} bg-warning 
+                                {% elif khach.status == 'Cancel' %} bg-danger
+                                {% else %} bg-success
+                                {% endif %} text-wrap fw-medium" style="width: 10rem;">
+                                        With: {{ khach.technician | title }}
+                                        {%if khach.status == "Anyone" %}
+                                    <br>Random: {{ khach.status }}
+                                            {% elif khach.status == 'Cancel' %}
+                                    <br>Was {{ khach.status }}ed
+                                            {% endif %}
+                                </span>
+                            </p>
+                        
+                            {% if khach.services %}
+                            <ul>
+                                {% for dichvu in khach.services.all %}
+                                    <li>{{ dichvu | title }} </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %} 
+                            <h6>Done at: <span class="fs-5 text-danger">{{ khach.get_done_at }}</span></h6>
+                        </div>
+                    </a>
+                </div>
+        {%endfor%}
+    </div>
+    {%endfor%}
+    
+</div>
+
+
+{% endblock content %}
+
+
+
+{% block footer %}
+    
+{% endblock footer %}
+ 

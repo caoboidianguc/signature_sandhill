@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+
+{% block heading %}
+    <title>Order Successful - DayEarn</title>
+{% endblock heading %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 fw-bold mb-4">Thank You, {{ client_name |title}}!</h1>
+            <p class="text-success fs-4">Date: {{ today }}</p>
+            <p> with technician: <span class="fs-5">{{ tech.name | title }}</span class="fs-5"></p>
+            {% if services %}
+                <p class="lead mb-3">You have successfully purchased the following services:</p>
+                <div class="card shadow-sm p-4 mb-4">
+                    <ul class="list-group list-group-flush">
+                        {% for service in services %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ service.description|title }}</span>
+                                <span>${{ service.total_price }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <p class="mt-4 mb-0 fw-bold fs-4">Total Amount: <span class="text-success">${{ total }}</span></p>
+                    <p class="text-danger">Please show receipt at checkout. </p>
+                </div>
+            {% else %}
+                <p class="lead">Thank you for your purchase!</p>
+            {% endif %}
+            
+            {% if error %}
+                <div class="alert alert-danger mt-4" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+
+{% endblock footer %}
+

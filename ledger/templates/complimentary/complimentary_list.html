@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+
+{% block nutPhu %}
+  <a class="nav-link" href="{% url 'ledger:add_complimentary' %}">Add New Item</a>
+{% endblock nutPhu %}
+
+{% block content %}
+  <h1>{{ user.username| title }}'s Complimentary Items</h1>
+  
+  {% if complimentary_list %}
+    <ul>
+      {% for complimentary in complimentary_list %}
+        <li>
+          <button class="item-available {% if complimentary.is_available %} fs-1 text-success{% endif %} " 
+            data-url="{% url 'ledger:complimentary_available' complimentary.id %}">
+          {{ complimentary.title |title }} 
+          {% if complimentary.description %}
+            - <span class="text-muted">{{ complimentary.description }}</span>
+          {% endif %}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No complimentary items found.</p>
+  {% endif %}
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0 ; i < cookies.length; i++ ) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length +1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length +1 ));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+const csrftoken = getCookie('csrftoken');
+
+$(document).ready(function() {
+    $('.item-available').on('click', function() {
+        const button = $(this);
+        const url = button.data('url');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (response.is_available) {
+                        button.addClass('fs-1 text-success');
+                    } else {
+                        button.removeClass('fs-1 text-success');
+                    }
+                }
+            },
+            error: function() {
+                alert('An error occurred while updating the item status.');
+            }
+        });
+    });
+});
+</script>
+<style>
+  .item-available {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+</style>
+{% endblock content %}

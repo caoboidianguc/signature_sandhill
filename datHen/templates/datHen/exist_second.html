@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+
+{% block nutChinh %}
+
+{% endblock nutChinh %}
+
+{% block heading %}
+    <h1 class='title'>Please pick a date</h1>
+    {% if messages %} 
+    {% for tin in messages %} 
+    <li class="tinnhan">{{ tin }}</li>
+    {% endfor %}
+    {% endif %}
+{% endblock heading %}
+
+
+{% block content %}
+
+      <form action='{% url "datHen:service_choice_exist" %}' method='get'>
+        {% csrf_token %}
+        <div class="table-responsive">
+                
+          <div class="form-group col-md-4">
+                {{ secondForm.day_comes | as_crispy_field }}
+              </div>
+              
+              <input type='submit' onclick="window.location='{% url 'datHen:first_step' %}'; return false; " value='Back' class="btn btn-primary">
+            <input type='submit' value='Next ->' class="btn btn-info" >
+            
+        </div>
+        
+    </form>
+      
+{% endblock content %}
+
+
+
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

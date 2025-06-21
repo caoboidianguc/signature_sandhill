@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block heading %}
+<h1 class="title">Owner only</h1>
+<!-- <span>Or</span>
+<a class="btn btn-outline-primary" href="{% url 'ledger:register' %}" role="button">Register</a> -->
+{% endblock heading %}
+    
+
+{% block content %}
+    
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="col-md-4 mb-3">
+        {{ form | crispy }}
+        </div>
+        <input type="submit" value="Login">
+    <input type="submit" onclick="window.location='{% url 'ledger:index' %}'; return false; " value="Cancel">
+    </form>
+
+    
+{% endblock content %}
+
+
+    

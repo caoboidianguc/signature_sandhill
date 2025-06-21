@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block heading %}
+    <h1 class='title'>Schedule</h1>
+{% endblock heading %}
+
+{% block content %}
+
+<form method="post">
+    <div class="row g-3">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <div class="table-responsive">
+                <div class="form-group mb-3">
+                    {{ form.phone | as_crispy_field }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.full_name | as_crispy_field }}
+                    <div class="client-list"></div>
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.time_at | as_crispy_field }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.day_comes | as_crispy_field }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.technician | as_crispy_field }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.status | as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                {% regroup form.services.field.queryset by category as category_list %}
+                    {% for category in category_list %}
+                        <div class="list">
+                            <p class="fs-4 text-primary">{{ category.grouper }}</p>
+                            {% for dichvu in category.list %}
+                                <p class="service-item">
+                                        <input type="checkbox" name="services" id="{{ dichvu.id }}" value="{{ dichvu.id }}">
+                                        {{ dichvu|title }}
+                                    </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary w-25" type="submit">Book</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='{% url 'datHen:listHen' %}';">Cancel</button>
+        </div>
+    </div>
+</form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_phone').on('input', function(){
+            var phone = $(this).val();
+            $.ajax({
+                url: "{% url 'datHen:schedule_get_client' %}",
+                data: {
+                    'phone': phone
+                },
+                dataType: 'json',
+                success: function(data){
+                    var $fullName = $('#id_full_name');
+                    var clientlist = $('.client-list');
+                        clientlist.empty();
+
+                    if (data.length == 1) {
+                        $('#id_full_name').val(data[0].full_name);
+                    } else if (data.length > 1) {
+                        
+                        var list = $('<ul class="list-group"></ul>');
+
+                        data.forEach(function(client) {
+                            var item = $('<li class="list-group-item"></li>').text(client.full_name + ' ' + client.phone);
+                            item.on('click', function() {
+                                $fullName.val(client.full_name);
+                                $('#id_phone').val(client.phone);
+                                clientlist.empty();
+                            });
+                            list.append(item);
+                        });
+                        clientlist.append(list);
+                    } else {
+                        $('#id_full_name').val('');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
+

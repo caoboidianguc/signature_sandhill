@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block nutPhu %}
+        <a class="nav-link" href="{% url 'ledger:add_employee' %}">Add Tech</a>
+{% endblock nutPhu %}
+
+{% block content %}
+{% comment %} {% if not user.is_authenticated %}
+<div>
+    <a href="{% url 'ledger:register' %}">Register Account</a>
+</div> 
+{% endif %}
+{% endcomment %}
+<div class="container text-center">
+  <div class="row row-cols-auto">
+    {% for employee in employees %}
+    {% if employee.isWork %}
+    <div class="cols-auto">
+      <button class="tech-button btn btn-ligh" style="border: 2px solid green" id="em_{{employee.id}}">
+        <div class="card-body">
+             <h5 class="card-title align-text-top"> {{ employee.name | title }}</h5>
+          <div class="card-subtitle align-content-center">{{ employee.time_come_in |time:"H:i A"}}</div>
+          <span class="align-bottomr fs-3 text-primary"> {{ employee.get_services_today | default:0 }}</span> Service
+      </div>
+      </button>
+    </div>
+    
+    {% endif %}
+    {% endfor %}
+  <hr style="border: 1px solid black; width: 100%; margin: 20px 0;">
+  {% for employee in employees %}
+  {% if not employee.isWork %}
+  <div class="cols-auto">
+    <button class="tech-button btn btn-secondary" style="border: 2px solid gray" id="em_{{employee.id}}">
+      <div class="card-body">
+           <h5 class="card-title align-text-top"> {{ employee.name | title }}</h5>
+        <span class="card-subtitle align-content-center">Off</span>
+    </div>
+    </button>
+  </div>
+  
+  {% endif %}
+  {% endfor %}
+  </div>
+</div>   
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('.tech-button').click(function() {
+          var techId = $(this).attr('id').split('_')[1];
+          var button = $(this);
+          $.ajax({
+            url: '{% url "ledger:update_tech_status" %}',
+            type: 'POST',
+            data: {
+              'tech_id': techId,
+              'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+              if (response.success) {
+                button.css('border', '2px solid ' + response.color);
+                button.find('.card-subtitle').text(response.isWork ? 'Came at: ' + response.time_come_in : "Off");
+                
+                if (response.isWork){
+                  button.closest('.cols-auto').insertBefore('.row.row-cols-auto hr');
+                  button.addClass('btn-light').removeClass('btn-secondary');
+                } else {
+                  button.closest('.cols-auto').insertAfter('.row.row-cols-auto hr');
+                  button.addClass('btn-secondary').removeClass('btn-light');
+                }
+              } else {
+                alert(response.error);
+              }
+            }
+          });
+        });
+      });
+    </script>
+
+{% endblock content %}
+    
+{% block footer %}
+    {% comment %} <a class="btn btn-primary" href="{% url 'password_change' %}">Change Password</a> {% endcomment %}
+{% endblock footer %}
+
+<!-- https://x.com/i/grok/share/7LKBdIeextzDNORfdzVhdEQO1 --> 

@@ -1,0 +1,5 @@
+{
+    "CodeGPT.apiKey": "CodeGPT Plus Beta",
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/d8947932-258a-479d-a0c4-f0ff6b537603/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/signature",
+    "appService.deploySubpath": "."
+}

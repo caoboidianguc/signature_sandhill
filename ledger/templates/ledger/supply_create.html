@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block heading %}
+<h1>Request a Supply</h1>
+    {% if messages %}
+        {% for tin in messages %}
+            <div class="fs-3 text-success text-center">
+                {{ tin }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock heading %}
+
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group col-md-4">
+    {{ form | crispy }}
+    </div>
+    <input type='submit' value='Add' class="btn btn-info w-25" role="button">
+    <a href="{% url 'ledger:all_supplies' %}" class="btn btn-primary" role="button">All Supply</a>
+</form>  
+{% endblock content %}
+

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block nutChinh %}
+
+{% endblock nutChinh %}
+
+{% block heading %}
+<figure class="text-end text-primary">
+    <blockquote class="blockquote">
+      <p>Elegance is often first perceived through your appearance.</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        Where Beauty meets relaxation - <cite title="Source Title"> Signature Nails Sandhill</cite>
+    </figcaption>
+</figure>
+{% if messages %} 
+    {% for tin in messages %} 
+    <li class="text-success fs-4">{{ tin }}</li>
+    {% endfor %}
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock heading %}
+
+{% block content %}
+<div class="hero" style="background-image: url('{% static 'ledger/images/signature.jpg' %}'); background-size: cover; background-position: center; padding: 150px 0; border-radius: 15px;">
+    <div class="container text-center text-white">
+        
+        <h1 class="display-4 text-bottom">Your Journey to Beauty Begins Here</h1>
+        <p class="lead text-bottom">Experience the pinnacle of nail care and beauty treatments at Signature Nails Sandhill</p>
+    </div>
+</div>
+<!-- Complimentary Section -->
+{% if complimentaries %}
+<div class="container my-5">
+    <h2 class="text-center mb-3 p-2 bg-light rounded-5" style="border-radius: 15px;">
+        Today's Complimentary 
+        <span class='fs-5 fst-italic text-primary' style="transition: color 0.3s;">{{ today|date:'F-d'}}
+
+        </span>
+    </h2>
+    
+    <div class="d-flex flex-nowrap overflow-auto">
+        {% for item in complimentaries %}
+        <div class="col-md-3 mb-4 px-2">
+            <div class="card h-100" style="width: 18rem;">
+                <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ item.title | title }}</h5>
+                    <span> {{ item.description }} </span>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<!-- Staffs Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-3">Our Staffs</h2>
+    <div class="d-flex flex-nowrap overflow-auto">
+        {% for tech in allTech %}
+        <div class="col-md-3 mb-4 px-2">
+            <a class="nav-link" href="{% url 'ledger:employee_bio' tech.id %}">
+            <div class="card h-100" style="width: 18rem;">
+                <img src="{{ tech.picture }}" class="card-img-top" alt="{{ tech.name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ tech.name | title }}</h5>
+                    <p class="card-text"><small class="text-muted">Experience: {{ tech.get_experience }} years</small></p>
+                    <p class="card-text flex-grow-1"><small class="text-muted">Expertise: {{ tech.get_bio }}</small></p>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Services Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-3">Our Services</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <a class="nav-link" href="{% url 'ledger:service_info' category='Nail Enhancement' %}">
+            <h3 class="text-center">Nails</h3></a>
+            {% for nail in nails %}
+            <ul class="list-unstyled text-md-center">
+                <li>{{ nail.service | title }}</li>
+                
+                {% endfor %}
+            </ul>
+            
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" href="{% url 'ledger:service_info' category='Pedicure' %}">
+            <h3 class="text-center">Pedicure</h3></a>
+            {% for feet in feets %}
+            <ul class="list-unstyled text-md-center">
+                <li>{{ feet.service | title}}</li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" href="{% url 'ledger:service_info' category='Manicure' %}">
+            <h3 class="text-center">Manicure</h3></a>
+            {% for tay in mani %}
+            <ul class="list-unstyled text-md-center">
+                <li>{{ tay.service | title }}</li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" href="{% url 'ledger:service_info' category='Eyelash Extensions' %}">
+            <h3 class="text-center">Eyelash Extensions</h3></a>
+            {% for eyelash in eyelashs %}
+            <ul class="list-unstyled text-md-center">
+                <li>{{ eyelash.service | title }}</li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" href="{% url 'ledger:service_info' category='Wax' %}">
+            <h3 class="text-center">Wax</h3></a>
+            {% for wax in waxs %}
+            <ul class="list-unstyled text-md-center">
+                <li>{{ wax.service | title }}</li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+
+     Discover your beauty with us.
+    <a class="nav-link" href="{% url 'ledger:privacy' %}">
+        Privacy Policy</a>
+        <a class="nav-link" href="{% url 'ledger:contact' %}">
+            Contact us</a>
+    <br>
+    {% if latest_image_urls %}
+    <div class="image-container" style="overflow-x: auto; white-space: nowrap; max-width: 100%;">
+        {% for image_url in latest_image_urls %}
+            <img src="{{ image_url }}" alt="Image from FB" style="max-width: 50%; height: auto;">
+            
+        {% endfor %} 
+    </div>
+    {% endif %}
+{% endblock footer %}
+

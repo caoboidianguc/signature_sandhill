@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load humanize %}
+{% load static %}
+
+
+
+{% block heading %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-4 fw-bold">Welcome, {{ client.full_name }}!</h1>
+    <a href="{% url 'ledger:iam_here' client.id %}" class="btn btn-primary btn-lg">
+        <i class="bi bi-geo-alt-fill me-2"></i>Visit My Spa
+    </a>
+</div>
+{% endblock heading %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Main Chat -->
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-1">{{ chat.text }}</h5>
+                    <div class="d-flex align-items-center text-muted small mt-2">
+                        <span class="ms-3">
+                            <i class="bi bi-bar-chart me-1"></i>{{ chat.view_count }}
+                        </span>
+                        <span class="ms-3">
+                            {% if chat.owner == user %}
+                            <span class="badge bg-primary">@Manager</span>
+                            {% else %}
+                            <span class="fw-semibold">{{ chat.nickName }}</span>
+                            {% endif %}
+                        </span>
+                        <span class="ms-auto">
+                            <small>{{ chat.created_at | naturaltime }}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replies -->
+            <h3 class="mb-3">Replies</h3>
+            {% for reply in replies %}
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="card-text mb-1">{{ reply.text }}</p>
+                        {% if reply.client_id == khach_id %}
+                        <button class="btn btn-sm btn-outline-danger delete-chat"
+                                data-chat-id="{{ reply.id }}"
+                                data-url="{% url 'ledger:chat_delete' reply.id %}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center text-muted small mt-2">
+                        <button class="btn btn-sm btn-link text-muted like-button {% if reply.current_khach_like %}text-danger{% endif %}"
+                                data-chat-id="{{ reply.id }}"
+                                data-url="{% url 'ledger:chat_detail_like' reply.id %}">
+                            <i class="bi bi-heart-fill me-1"></i><span class="like-count">{{ reply.total_likes }}</span>
+                        </button>
+                        <span class="ms-3">
+                            <i class="bi bi-bar-chart me-1"></i>{{ reply.view_count }}
+                        </span>
+                        <span class="ms-3">
+                            {% if reply.owner == user %}
+                            <span class="badge bg-primary">@Manager</span>
+                            {% else %}
+                            <span class="fw-semibold">by: {{ reply.nickName }}</span>
+                            {% endif %}
+                        </span>
+                        <span class="ms-auto">
+                            <small>{{ reply.created_at | naturaltime }}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-chat-left-text display-4"></i>
+                <p class="mt-3">No replies yet. Be the first to respond!</p>
+            </div>
+            {% endfor %}
+
+            <!-- Reply Form or Back Button -->
+            {% if client.can_post_chat %}
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Add Your Reply</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ chat_form | crispy }}
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-3 w-25">Reply</button>
+                            <a href="{% url 'ledger:chat_room' khach_id %}" class="btn btn-outline-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'ledger:chat_room' khach_id %}" class="btn btn-outline-secondary">Back</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock content %}
+
+{% block footer %}
+<div class="text-center py-3 bg-light">
+    <strong>Feedback Makes Us Stronger</strong> | Established 2022
+</div>
+{% endblock footer %}

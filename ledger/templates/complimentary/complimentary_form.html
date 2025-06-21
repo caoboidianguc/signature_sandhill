@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block heading %}
+    <h1>Add Complimentary item</h1>
+    {% if messages %}
+        {% for tin in messages %}
+            <div class="fs-3 text-success text-center">
+                {{ tin }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock heading %}
+
+
+{% block content %}
+<div>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group col-md-4">
+    {{ form | crispy }}
+    </div>
+
+    <input type="submit" value="Add " class="btn btn-primary w-25">
+    <input type="submit" onclick="window.location='{% url 'ledger:complimentary_list' %}'; return false; " value="Cancel" class="btn btn-secondary">
+</form>  
+</div>
+{% endblock content %}

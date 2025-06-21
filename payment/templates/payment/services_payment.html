@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block heading %}
+    <title>Payment Services</title>
+{% endblock heading %}
+{% block content %}
+<style>
+    #ser_form .form-check {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    #ser_form .form-check:hover {
+        background-color: #f8f9fa;
+    }
+    #ser_form .form-check:last-child {
+        border-bottom: none;
+    }
+    .card {
+        width: 100%;
+        max-width: 100%;
+    }
+    .technician-card {
+        cursor: pointer;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        align-items: center;
+        display: flex;
+        text-align: center;
+    }
+    .technician-card h5 {
+        margin: 0;
+        white-space: normal;
+    }
+    .technician-card.selected {
+        border-color: #007bff;
+        background-color: #e9f7ff;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Our Services</h1>
+                    <p class="lead text-muted fs-5">Important Note: please make full use of our 
+                        services during your visit before proceeding to checkout. Thank you!
+                    </p>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'payment:multi_checkout_session' %}" method="post" id="ser_form">
+                        {% csrf_token %}
+                        
+                        <h3>Select a Technician</h3>
+                        <div class="row justify-content-center">
+                            {% for tech in techs %}
+                                <div class="col-12 col-md-4">
+                                    <div class="technician-card" data-tech-id="{{ tech.id }}">
+                                        <h5>{{ tech.name |title }}</h5>
+                                        
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="technician_id" id="technician_id">
+
+                        <h3 class="mt-4">Select Services</h3>
+                        {% for service in services %}
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="service_ids" value="{{ service.id }}">
+                                <label class="form-check-label">{{ service.service|title }} - {{ service.price }}</label>
+                            </div>
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary mt-3">Proceed to Checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var technicianCards = document.querySelectorAll('.technician-card');
+        technicianCards.forEach(function(card) {
+            card.addEventListener('click', function() {
+                technicianCards.forEach(function(c) {
+                    c.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                document.getElementById('technician_id').value = this.getAttribute('data-tech-id');
+            });
+        });
+
+        document.getElementById('ser_form').addEventListener('submit', function(event) {
+            var technicianId = document.getElementById('technician_id').value;
+            var checkboxes = document.querySelectorAll('input[name="service_ids"]:checked');
+            if (!technicianId) {
+                alert("Please select a technician.");
+                event.preventDefault();
+            } else if (checkboxes.length === 0) {
+                alert("Please choose at least one service.");
+                event.preventDefault();
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('.form-check input[type="checkbox"]').on('change', function() {
+            var $serviceItem = $(this).closest('.form-check');
+            if ($(this).is(':checked')) {
+                $serviceItem.addClass('fs-4 text-success');
+            } else {
+                $serviceItem.removeClass('fs-4 text-success');
+            }
+        });
+    });
+</script>
+{% endblock content %}
+
+{% block footer %}
+
+{% endblock footer %}
+

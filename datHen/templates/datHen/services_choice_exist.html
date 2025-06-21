@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block heading %}
+    <h1 class='title'>Please Choice your Services:</h1>
+    
+{% endblock heading %}
+
+
+{% block content %}
+<h1>All services:</h1>
+    
+
+<form action="{% url 'datHen:third_step_exist' %}" method='get' id="ser_item">
+    {% csrf_token %}
+    <div class="table-responsive">
+        <div class="container mt-4">
+            <h3>Pedicure</h3>
+            {% for choice in form.dichvu.field.queryset %}
+                {% if choice.category == "Pedicure" %}
+                
+                <p class="card-text">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                            <span class="checkmark"></span>
+                            {{ choice | title }}
+                        </label>
+                    </div>
+                    </p>{% endif %}
+                    {% endfor %}
+                    <h3>Nail Enhancement</h3>
+                    {% for choice in form.dichvu.field.queryset %}
+                    {% if choice.category == "Nail Enhancement" %}
+                    <p class="card-text">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                                <span class="checkmark"></span>
+                                {{ choice | title }}
+                            </label>
+                        </div>
+                        </p>{% endif %}
+                        {% endfor %}
+                        <h3>Manicure</h3>
+                        {% for choice in form.dichvu.field.queryset %}
+                        {% if choice.category == "Manicure" %}
+                        
+                    <p class="card-text">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                                <span class="checkmark"></span>
+                                {{ choice | title }}
+                            </label>
+                        </div>
+                        </p>
+                        {% endif %}
+                        {% endfor %}
+                
+        </div>
+              <input type='submit' onclick="window.location='{% url 'ledger:index' %}'; return false; " value='Back' class="btn btn-primary">
+            <input type='submit' value='Next ->' class="btn btn-info" >
+            
+       
+        
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('ser_item').addEventListener('submit', function(event) {
+                var checkboxes = document.querySelectorAll('input[name="dichvu"]:checked');
+                if (checkboxes.length === 0) {
+                    alert("Please choose at least one service.");
+                    event.preventDefault();
+                }
+            });
+        });
+        $(document).ready(function() {
+            $('.form-check input[type="checkbox"]').on('change', function() {
+                var $dichvu = $(this).closest('.form-check');
+                if ($(this).is(':checked')) {
+                    $dichvu.addClass('fs-4 text-success');
+                } else {
+                    $dichvu.removeClass('fs-4 text-success');
+                }
+            
+            });
+        });
+    </script>
+    
+{% endblock content %}
+
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

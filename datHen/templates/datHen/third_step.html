@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block heading %}
+<h1 class='title'>If you like alternate nail tech in case of...</h1>
+<h4>you can change the <span class="text-danger">Status to "Anyone"</span></h4>
+{% endblock heading %}
+
+
+{% block content %}
+
+<h5>Your technician: <strong>{{ tech | title }}</strong></h5>
+<h5>Day coming: <strong>{{ ngay | date:"F d" }}</strong></h5>
+    <div class="work-schedule">
+      
+    </div>
+      <h5>
+        <div>Services Picked:</div>
+      {% for service in allServices %}
+      <div>
+  <li><strong>{{ service | title }}</strong> </strong></li>
+  {% endfor %}
+      
+    </div>
+  </h5>
+    <div class="work-schedule">
+        <div>Please fill out:</div>
+        
+      </div>
+      {% if form.errors %}
+    <div class="alert alert-danger">
+        {{ form.errors }}
+      {% if 'A client with this Full name and Phone already exists.' in form.non_field_errors %} 
+        <span class="fs-3"><a href="{% url 'datHen:find_client' %}">Go Here</a></span>
+        {% else %}
+          {% for error in form.non_field_errors %}
+          <p class="errorlist"> {{ error}}</p>
+          {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+      <form action='' method='post'>
+        {% csrf_token %}
+        <div class="table-responsive">
+        
+              <div class="col-md-4 mb-3">
+                <select class="form-select" name="time_at" id="id_time_at" aria-label="Default select example">
+                  
+                  <option selected>Select your time:</option>
+                  {% for tieng in available %}
+                  <option value="{{tieng.hour }}:{{tieng.minute }}">{{tieng.hour }} : {{tieng.minute }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+
+              <div class="form-group col-md-4 mb-3">
+                {{ form.full_name | as_crispy_field }}
+              </div>
+
+              <div class="form-group col-md-4 mb-3">
+                {{ form.phone | as_crispy_field }}
+              </div>
+
+              <div class="form-group col-md-4 mb-3">
+                {{ form.email | as_crispy_field }}
+              </div>
+
+              <div class="form-group col-md-4 mb-3">
+                {{ form.status | as_crispy_field }}
+              </div>
+
+              <button class="btn btn-primary w-25" type='submit'> Submit </button>
+              <button type='submit' class="btn btn-secondary" onclick="window.location='{% url 'ledger:index' %}'; return false; ">Cancel</button>
+            
+        </div>
+        
+    </form>
+      
+
+    <script>
+      var ngay = new Date()
+      var gio = ngay.getHours()
+
+    </script>
+{% endblock content %}
+
+
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

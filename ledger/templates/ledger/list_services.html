@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block nutPhu %}
+<a class="nav-link" href="{% url 'ledger:add_service' %}">Add Service</a>
+{% endblock nutPhu %}
+
+{% block heading %}
+<h1 class="title">All Services</h1>
+{% endblock heading %}
+
+{% block content %}
+{% if dvu %}
+<div class="container">
+    {% regroup dvu by category as category_list %}
+    
+    {% for category in category_list %}
+    <h2 class="mt-4">{{ category.grouper }}</h2>
+        <div class="row row-cols-auto">
+            {% for ser in category.list %}
+                <div class="col">
+                    <span class="fs-4 text-capitalize text-primary">
+                        <a href="{{ ser.get_url }}" 
+                        class="text-decoration-none link-offset-2 link-underline link-underline-opacity-0">
+                            {{ ser.service | title }}
+                        </a>
+                        {% if not ser.description == "" %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                          </svg>
+                         {% endif %}
+                    </span>
+                    <br>$ {{ ser.price }}
+                    <p>{{ ser.time_perform }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div>
+    All your services will list here.
+</div>
+{% endif %}
+{% endblock content %}

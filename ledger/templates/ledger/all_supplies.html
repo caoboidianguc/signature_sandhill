@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load humanize %}
+{% load static %}
+
+
+{% block nutPhu %}
+<a href="{% url 'ledger:supply_create' %}" class="btn btn-primary" role="button">Add Supply</a>
+{% endblock nutPhu %}
+  
+{% block heading %}
+    <h1> All Supplies
+        <button class="edit-supply">
+            <i class="bi bi-pencil fs-4"></i>
+        </button>
+    </h1>
+{% endblock heading %}
+  
+{% block content %}
+    {% if supply_list %}
+    <ul>
+        {% for item in supply_list %}
+            <li>
+                <button class="nut-item {% if item.is_wanted %}fs-2 text-success{% endif %}" 
+                        data-url="{% url 'ledger:supply_is_wanted' item.id %}">
+                    {{ item.title |title }} 
+                        {% if item.is_wanted %}
+                            <span class='add-cart'>- {{ item.quantity }} <i class="bi bi-bag-check"></i></span>
+                        {% else %}
+                        <span class="item-time"> - {{ item.date | naturaltime }} </span>
+                        {% endif %}
+                    <span class="fs-6 text-secondary">{{ item.info }}</span>
+                </button>
+                <button class="delete-item fs-3" data-url="{% url 'ledger:supply_delete' item.id %}">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>There are no supplies for now.</p>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/supply.js' %}"></script>
+    <style>
+        .nut-item {
+            border: none;
+            background: none;
+        }
+        .bi.bi-trash3 {
+            color: red;
+        }
+        .delete-item {
+            border: none;
+            background: none;
+        }
+        .edit-supply {
+            border: none;
+            background: none;
+        }
+    </style>
+{% endblock content %}
+
+

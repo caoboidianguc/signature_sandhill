@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block nutPhu %}
+{% endblock nutPhu %}
+
+{% block heading %}
+<div class="text-center my-4">
+    <h1 class="title text-danger">Cancel Your Appointment?</h1>
+    <p class="lead text-muted">Please review the appointment details below before confirming cancellation.</p>
+</div>
+{% endblock heading %}
+
+{% block content %}
+<div class="container my-5">
+    {% if visit %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Appointment Details</h5>
+            <p class="mb-1"><strong>Client:</strong> {{ visit }}</p>
+            <p class="mb-3"><strong>Phone:</strong> {{ visit.client.phone_formatted }}</p>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Date:</strong> <span class="fs-5">{{ visit.day_comes }}</span></p>
+                    <p><strong>Time:</strong> <span class="fs-5 text-danger">{{ visit.time_at }}</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Services:</strong></p>
+                    <ul class="list-group list-group-flush">
+                        {% for service in visit.services.all %}
+                        <li class="list-group-item">{{ service.service }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <form action="" method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-primary px-4">Confirm Cancellation</button>
+            <button type="button" class="btn btn-secondary px-4" onclick="window.location='{% url 'datHen:listHen' %}';">Cancel</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

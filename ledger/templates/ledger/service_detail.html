@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block nutChinh %}
+<a class="nav-link" href="#"></a>
+{% endblock nutChinh %}
+
+
+{% block heading %}
+<h1 class="title">{{ service }}'s Detail</h1>
+{% endblock heading %}
+
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group col-md-4">
+    {{ form | crispy }}
+    </div>
+    <input type="submit" value=" Update " class="btn btn-primary">
+    <input type="submit" onclick="window.location='{% url 'ledger:services' %}'; return false; " value="Cancel">
+</form>  
+{% endblock content %}
+    

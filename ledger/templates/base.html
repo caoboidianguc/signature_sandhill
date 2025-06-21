@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Signature</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        
+        .navbar .auth-buttons {
+            margin-left: auto; /* Pushes it to the right */
+        }
+        @media (max-width: 991px) {
+            .navbar .auth-buttons {
+                margin-left: 0; /* Reset margin on small screens */
+                text-align: right; /* Align right on collapsed menu */
+                padding: 10px; /* Add some padding for better spacing */
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'ledger:index' %}">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="text-primary fs-1"><i class="bi bi-calendar-day"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ledger:complimentary_list' %}">Complimentary</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ledger:all_supplies' %}">Supply</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ledger:services' %}">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'ledger:all_employee' %}">All Employee</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ledger:user_chat_room' %}">Chat Room</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ledger:walkin' %}">Walk In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'datHen:listHen' %}">Today Clients</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'datHen:first_step' %}">I'm New</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'datHen:find_client' %}">Been Here</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                        <form id="logout-form" method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-info" type="submit">Logout</button>
+                        </form>
+                    {% else %}
+                        
+                        <!-- <a class="btn btn-outline-primary" href="{% url 'payment:services_for_checkout' %}">Check-out</a> -->
+                        
+                        <a class="btn btn-outline-info" href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="nav justify-content-center fs-4" style="background-color: #e3f2fd;">
+        <h1 class="nav-link"><span class="cursive-text display-5">Signature Nails Sandhill</span> </h1>
+    </nav>
+    <nav class="nav d-flex justify-content-center fs-4" style="background-color: #e3f2fd;">
+        <span class="me-auto">
+            {% block nutChinh %}
+            {% endblock nutChinh %}
+        </span>
+        <span class="mx-auto">
+            {% block time %}{% endblock time %}
+        </span>
+        <span class="ms-auto">
+            {% block nutPhu %}   {% endblock nutPhu %}
+        </span>
+    </nav>
+    <div class="container-md">
+        {% block heading %}
+        {% endblock heading %}
+    </div>
+
+    <div class="container-fluid">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <footer class="footer bg-light text-center py-3">
+        <div class="card-body">
+            <h5 class="card-title">Signature Nails Sandhill</h5>
+            <p class="card-text">
+                Our operating hours:<br>
+                Tuesday - Saturday: <strong>9:30AM - 7:00PM</strong><br>
+                Sunday: <strong>11:00AM - 5:00PM</strong><br>
+                <strong>Monday: Closed</strong><br>
+            </p>
+        </div>
+        
+        <a class="btn btn-outline-info" href="tel:(803) 205-1657" role="button">
+            <i class="bi bi-telephone-fill"></i> Call us: (803) 205-1657
+        </a>
+        <div class="text-center my-2">
+            We are located at:
+        </div>
+        <a class="btn btn-outline-info" href="https://maps.app.goo.gl/N22SLvopRPyCCpAp9" role="button">
+            Address: 163 Forum Dr, Ste-5 Columbia, SC 29229
+        </a>
+        <!-- <a class="btn btn-outline-info" href="https://www.facebook.com/quang.hu.10" role="button">
+            Follow us on
+            <img src="{% static 'ledger/images/Facebook.png' %}" alt="Facebook logo" width="20" height="20" class="me-1">
+        </a> -->
+        <div class="text-center">
+        {% block footer %}
+        {% endblock footer %}
+        </div>
+    </footer>
+
+    
+</body>
+</html>

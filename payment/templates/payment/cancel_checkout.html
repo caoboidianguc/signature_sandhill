@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block nutChinh %}
+
+{% endblock nutChinh %}
+
+{% block heading %}
+    <title>Checkout canceled</title>
+{% endblock heading %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-3">Checkout Canceled</h1>
+            <p class="lead text-muted">
+                It looks like you’ve canceled your checkout. No charges have been made.
+            </p>
+            <p>
+                Ready to try again or explore more services? Let’s get you back on track!
+            </p>
+            <a href="{% url 'ledger:index' %}" class="btn btn-primary btn-lg mt-3">
+                Return to Home
+            </a>
+            
+        </div>
+    </div>
+</div>
+<h1>Checkout canceled!</h1>
+
+
+{% endblock content %}
+
+{% block footer %}
+
+{% endblock footer %}
+

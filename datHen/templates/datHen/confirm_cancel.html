@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block nutChinh %}
+<a class="nav-link" href="{% url 'datHen:listHen' %}">
+    <h1 class="title text-primary">Back</h1>
+</a>
+{% endblock nutChinh %}
+
+{% block nutPhu %}
+{% if client %}
+<a href="{{ client.get_absolute_url }}" class="btn btn-primary">Reschedule</a>
+{% endif %}
+{% endblock nutPhu %}
+
+{% block heading %}
+<div class="text-center my-4">
+    <h1 class="title text-danger">You're About to Cancel Your Appointment</h1>
+    <p class="lead text-muted">Please review the information below before confirming the cancellation.</p>
+</div>
+{% endblock heading %}
+
+{% block content %}
+<div class="container my-5">
+    {% if client %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Client Information</h5>
+            <p class="mb-1"><strong>Name:</strong> {{ client.full_name }}</p>
+            <p><strong>Phone:</strong> {{ client.phone_formatted }}</p>
+        </div>
+    </div>
+
+    {% for visit in client.get_future_visit %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Appointment Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Technician:</strong> {{ visit.technician }}</p>
+                    <p><strong>Date:</strong> {{ visit.day_comes }}</p>
+                    <p><strong>Time:</strong> {{ visit.time_at }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Services:</strong></p>
+                    <ul class="list-group list-group-flush">
+                        {% for service in visit.services.all %}
+                        <li class="list-group-item">{{ service.service | title }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-warning" role="alert">
+        No upcoming appointments found.
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form action="" method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-primary">Confirm Cancellation</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location='{% url 'ledger:index' %}';">Cancel</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+{% block footer %}
+    <strong>Contact Us somewhere</strong>
+{% endblock footer %}
+ 

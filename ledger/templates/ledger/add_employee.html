@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block nutChinh %}
+    <a class="nav-link" href="{% url 'ledger:all_employee' %}"><h1 class='title'>Done</h1></a>
+{% endblock nutChinh %}
+
+{% block heading %}
+        <h2 class="title">
+            Add Employee
+        </h2>
+        {% if messages %} 
+            {% for tin in messages %} 
+            <div class="fs-3 text-success">
+                {{ tin }}</div>
+            {% endfor %}
+            {% endif %}
+
+{% endblock heading %}
+    
+{% block content %}
+<div class="container mt-3">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-floating col-md-3 align-items-center">
+            <div class="col-auto ">
+            <table>
+                
+                {{ form | crispy }}
+                
+            </table>
+        </div>
+    </div>
+    <br>
+            <button type="submit" class="btn btn-primary w-25"> Add  </button>
+            <button type="submit" class="btn btn-secondary" onclick="window.location='{% url 'ledger:index' %}'; return false; ">Cancel</button>
+        
+        </form>   
+    </div> 
+{% endblock content %}
+

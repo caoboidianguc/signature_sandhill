@@ -1,0 +1,31 @@
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between images as needed */
+    padding: 20px;
+}
+
+.image-container img {
+    border: 5px solid rgb(188, 219, 241); /* Blend the border with the white background */
+    border-radius: 15px; /* Optional: Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.navbar-item .btn {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .nav-link {
+        font-size: 0.9rem;
+    }
+
+    .navbar-end {
+        margin-left: auto;
+    }
+}
+
+.cursive-text {
+    font-family: 'cursive', sans-serif;
+}

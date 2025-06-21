@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block heading %}
+    <h1>Add Your favorite item</h1>
+    
+{% endblock heading %}
+
+
+{% block content %}
+<div>
+<form action="" method="post" class="p-4 bg-light rounded shadow-sm">
+    
+    {% csrf_token %}
+    <div class="form-group col-md-4">
+    {{ form | crispy }}
+    </div>
+
+    <input type="submit" value="Add " class="btn btn-primary w-25">
+    <input type="submit" onclick="window.location='{% url 'ledger:iam_here' client.pk %}'; return false; " value="Cancel" class="btn btn-secondary">
+</form>  
+</div>
+{% endblock content %}
+
