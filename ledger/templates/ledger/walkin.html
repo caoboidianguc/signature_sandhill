@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block nutChinh %}
+{% endblock nutChinh %}
+
+{% block heading %}
+    {% if messages %}
+        {% for tin in messages %}
+            <div class="fs-3 text-success text-center">
+                {{ tin }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <h1 class="text-info">Welcome to our salon!</h1>
+    {% endif %}
+{% endblock heading %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="table-responsive">
+            <p class="fs-4 text-center">{{ form.services.label }}</p>
+            <span class="fs-5 text-danger">{{ form.services.errors }}</span>
+            <div class="row g3">
+                <div class="col-md-4 mb-2">
+                    {{ form.full_name|as_crispy_field }}
+                    {{ form.phone|as_crispy_field }}
+                </div>
+                
+                <div class="col-md-4 mb-2">
+                    <h3>Pedicure</h3>
+                    {% for dichvu in form.services.field.queryset %}
+                        {% if dichvu.category == "Pedicure" %}
+                            <div class="list">
+                                <div class="service-item">
+                                    <input type="checkbox" 
+                                           name="services" 
+                                           id="{{ dichvu.id }}" 
+                                           value="{{ dichvu.id }}">
+                                    {{ dichvu|title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <h3>Manicure</h3>
+                    {% for dichvu in form.services.field.queryset %}
+                        {% if dichvu.category == "Manicure" %}
+                            <div class="list">
+                                <div class="service-item">
+                                    <input type="checkbox" 
+                                           name="services" 
+                                           id="{{ dichvu.id }}" 
+                                           value="{{ dichvu.id }}">
+                                    {{ dichvu|title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <h3>Nail Enhancement</h3>
+                    {% for dichvu in form.services.field.queryset %}
+                        {% if dichvu.category == "Nail Enhancement" %}
+                            <div class="list">
+                                <div class="service-item">
+                                    <input type="checkbox" 
+                                           name="services" 
+                                           id="{{ dichvu.id }}" 
+                                           value="{{ dichvu.id }}">
+                                    {{ dichvu|title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <h3>Eyelash Extensions</h3>
+                    {% for dichvu in form.services.field.queryset %}
+                        {% if dichvu.category == "Eyelash Extensions" %}
+                            <div class="list">
+                                <div class="service-item">
+                                    <input type="checkbox" 
+                                           name="services" 
+                                           id="{{ dichvu.id }}" 
+                                           value="{{ dichvu.id }}">
+                                    {{ dichvu|title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <h3>Wax</h3>
+                    {% for dichvu in form.services.field.queryset %}
+                        {% if dichvu.category == "Wax" %}
+                            <div class="list">
+                                <div class="service-item">
+                                    <input type="checkbox" 
+                                           name="services" 
+                                           id="{{ dichvu.id }}" 
+                                           value="{{ dichvu.id }}">
+                                    {{ dichvu|title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <input type='submit' value='Submit' class="btn btn-primary w-25" role="button">
+        <input type='submit' onclick="window.location='{% url 'ledger:walkin' %}'; return false; " value='Cancel' class="btn btn-muted" role="button">
+    </form>
+    <style>
+        .list {
+            padding: 2px;
+            gap: 5px;
+        }
+        .service-item {
+            border: 1px solid #ccc;
+            padding: 8px;
+            width: auto;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.service-item input[type="checkbox"]').on('change', function() {
+                var $serviceItem = $(this).closest('.service-item');
+                if ($(this).is(':checked')) {
+                    $serviceItem.addClass('fs-4 text-success');
+                } else {
+                    $serviceItem.removeClass('fs-4 text-success');
+                }
+            });
+        });
+    </script>
+{% endblock content %}
+
+{% comment %} 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 {% endcomment %}
