@@ -60,7 +60,7 @@
 {% endif %}
 <!-- Staffs Section -->
 <div class="container my-5">
-    <h2 class="text-center mb-3">Our Staffs</h2>
+    <h2 class="text-center mb-4 p-2 bg-light rounded-5" style="border-radius: 15px;">Our Staffs</h2>
     <div class="d-flex flex-nowrap overflow-auto">
         {% for tech in allTech %}
         <div class="col-md-3 mb-4 px-2">
@@ -80,62 +80,97 @@
 </div>
 <!-- Services Section -->
 <div class="container my-5">
-    <h2 class="text-center mb-3">Our Services</h2>
-    <div class="row">
-        <div class="col-md-3">
+    <h2 class="text-center mb-4 p-2 bg-light rounded-5" style="border-radius: 15px;">
+        Our Services
+    </h2>
+    <div class="row g-4">
+        <!-- Nail Enhancement -->
+        <div class="col-md-4 col-lg-3">
             <a class="nav-link" href="{% url 'ledger:service_info' category='Nail Enhancement' %}">
-            <h3 class="text-center">Nails</h3></a>
-            {% for nail in nails %}
-            <ul class="list-unstyled text-md-center">
-                <li>{{ nail.service | title }}</li>
-                
-                {% endfor %}
-            </ul>
-            
+                <div class="card h-100 service-card shadow-sm">
+                    <div class="card-body text-start">
+                        <h4 class="card-title text-primary">Nails</h4>
+                        <ul class="list-unstyled">
+                            {% for nail in nails %}
+                                <li class="service-item">{{ nail.service | title }}</li>
+                            {% empty %}
+                                <li class="text-muted">No services available</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a>
         </div>
-        <div class="col-md-3">
+        <!-- Pedicure -->
+        <div class="col-md-4 col-lg-3">
             <a class="nav-link" href="{% url 'ledger:service_info' category='Pedicure' %}">
-            <h3 class="text-center">Pedicure</h3></a>
-            {% for feet in feets %}
-            <ul class="list-unstyled text-md-center">
-                <li>{{ feet.service | title}}</li>
-                {% endfor %}
-            </ul>
-            
+                <div class="card h-100 service-card shadow-sm">
+                    <div class="card-body text-start">
+                        <h4 class="card-title text-primary">Pedicure</h4>
+                        <ul class="list-unstyled">
+                            {% for feet in feets %}
+                                <li class="service-item">{{ feet.service | title }}</li>
+                            {% empty %}
+                                <li class="text-muted">No services available</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a>
         </div>
-        <div class="col-md-3">
+        <!-- Manicure -->
+        <div class="col-md-4 col-lg-3">
             <a class="nav-link" href="{% url 'ledger:service_info' category='Manicure' %}">
-            <h3 class="text-center">Manicure</h3></a>
-            {% for tay in mani %}
-            <ul class="list-unstyled text-md-center">
-                <li>{{ tay.service | title }}</li>
-                {% endfor %}
-            </ul>
-            
+                <div class="card h-100 service-card shadow-sm">
+                    <div class="card-body text-start">
+                        <h4 class="card-title text-primary">Manicure</h4>
+                        <ul class="list-unstyled">
+                            {% for tay in mani %}
+                                <li class="service-item">{{ tay.service | title }}</li>
+                            {% empty %}
+                                <li class="text-muted">No services available</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a>
         </div>
-        <div class="col-md-3">
+        <!-- Eyelash Extensions -->
+        <div class="col-md-4 col-lg-3">
             <a class="nav-link" href="{% url 'ledger:service_info' category='Eyelash Extensions' %}">
-            <h3 class="text-center">Eyelash Extensions</h3></a>
-            {% for eyelash in eyelashs %}
-            <ul class="list-unstyled text-md-center">
-                <li>{{ eyelash.service | title }}</li>
-                {% endfor %}
-            </ul>
-            
+                <div class="card h-100 service-card shadow-sm">
+                    <div class="card-body text-start">
+                        <h4 class="card-title text-primary">Eyelash Extensions</h4>
+                        <ul class="list-unstyled">
+                            {% for eyelash in eyelashs %}
+                                <li class="service-item">{{ eyelash.service | title }}</li>
+                            {% empty %}
+                                <li class="text-muted">No services available</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a>
         </div>
-        <div class="col-md-3">
+        <!-- Wax -->
+        <div class="col-md-4 col-lg-3">
             <a class="nav-link" href="{% url 'ledger:service_info' category='Wax' %}">
-            <h3 class="text-center">Wax</h3></a>
-            {% for wax in waxs %}
-            <ul class="list-unstyled text-md-center">
-                <li>{{ wax.service | title }}</li>
-                {% endfor %}
-            </ul>
-            
+                <div class="card h-100 service-card shadow-sm">
+                    <div class="card-body text-start">
+                        <h4 class="card-title text-primary">Wax</h4>
+                        <ul class="list-unstyled">
+                            {% for wax in waxs %}
+                                <li class="service-item">{{ wax.service | title }}</li>
+                            {% empty %}
+                                <li class="text-muted">No services available</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>
-
 
 {% endblock content %}
 
