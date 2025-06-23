@@ -12,39 +12,10 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.http import JsonResponse
+from ledger import utils
 
 
 
-chuDe = "Signature Nails Sandhill Confirm schedule"
-tenSpa = "Signature Nails Sandhill"
-address = "4605 Forest Dr #5, Columbia, SC 29206"
-
-def cancel_visit(request, id):
-    url = reverse_lazy('datHen:cancel_confirm', kwargs={'pk': id})
-    link = request.build_absolute_uri(url)
-    button = f'<a href="{link}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Cancel Appointment</a>'
-    return button
-
-def saveKhachVisit(client, date, time, services, tech, status):
-    try:
-        khachvisit = KhachVisit(client=client, day_comes=date, time_at=time,technician=tech, status=status)
-        khachvisit.save()
-        khachvisit.services.set(services)
-        khachvisit.total_spent = sum(dv.price for dv in services)
-        khachvisit.save(update_fields=['total_spent'])
-    except ValueError as e:
-        print(f"Error saving KhachVisit: {e}")
-        return
-    
-def cancelKhachVisit(client):
-    try:
-        visit = KhachVisit.objects.filter(client=client)
-        for item in visit:
-            item.delete()
-    except ValueError as e:
-        print(f"Error retrived visit: {e}")
-        return
-    
 class DatHenView(LoginRequiredMixin,View):
     template_name = 'datHen/dathenview.html'
     def get(self, request):
@@ -200,32 +171,13 @@ class ExistThirdStep(View):
         khac.save()
         khac.services.set(services)
         form.save_m2m()
-        saveKhachVisit(khac, ngay, khac.time_at, services, tech, khac.status)
-        tinNhan = f"""
-                    <html>
-                    <body>
-                        <p>Thank you for booking with {tenSpa}!</p>
-                        <p>Your appointment is set for:</p>
-                        <ul>
-                            <li><strong>Date:</strong> {form.instance.day_comes}</li>
-                            <li><strong>Time:</strong> {form.instance.time_at}</li>
-                            <li><strong>Technician:</strong> {form.instance.technician}</li>
-                        </ul>
-                        <p>Need to change anything? </p>
-                        <p>{cancel_visit(request, khac.id)}</p>
-                    </body>
-                    <footer>
-                        <p>Address: {address}</p>
-                    </footer>
-                    </html>
-                    """
+        utils.saveKhachVisit(khac, ngay, khac.time_at, services, tech, khac.status)
+        utils.sendEmailConfirmation(request, form.instance)
         messages.success(request, f"{form.instance.full_name} was scheduled successfully!")
-        email = EmailMessage(chuDe, tinNhan, to=[form.instance.email])
-        email.content_subtype = 'html'
-        email.send()
+        
         thongbao = f"{form.instance.full_name} booked appointment with you on {form.instance.day_comes} at {form.instance.time_at} \nStatus: {form.instance.status}"
         if tech.email != None:
-            EmailMessage(chuDe, thongbao, to=[tech.email]).send()
+            EmailMessage(utils.chuDe, thongbao, to=[tech.email]).send()
                     
         return redirect(self.get_success_url())
 
@@ -336,32 +288,12 @@ class ThirdStep(View):
         khac.save()
         khac.services.set(services)
         form.save_m2m()
-        saveKhachVisit(khac, ngay, khac.time_at, services, tech, khac.status)
+        utils.saveKhachVisit(khac, ngay, khac.time_at, services, tech, khac.status)
         messages.success(request, f"{form.instance.full_name} was scheduled successfully!")
-        tinNhan = f"""
-                    <html>
-                    <body>
-                        <p>Thank you for booking with {tenSpa}!</p>
-                        <p>Your appointment is set for:</p>
-                        <ul>
-                            <li><strong>Date:</strong> {form.instance.day_comes}</li>
-                            <li><strong>Time:</strong> {form.instance.time_at}</li>
-                            <li><strong>Technician:</strong> {form.instance.technician}</li>
-                        </ul>
-                        <p>Need to change anything? </p>
-                        <p>{cancel_visit(request, khac.id)}</p>
-                    </body>
-                    <footer>
-                        <p>Address: {address}</p>
-                    </footer>
-                    </html>
-                    """
-        email = EmailMessage(chuDe, tinNhan, to=[form.instance.email])
-        email.content_subtype = 'html'
-        email.send()
+        utils.sendEmailConfirmation(request, form.instance)
         thongbao = f"{form.instance.full_name} booked appointment with you on {form.instance.day_comes} at {form.instance.time_at} \nStatus: {form.instance.status}"
         if tech.email != None:
-            EmailMessage(chuDe, thongbao, to=[tech.email]).send()
+            EmailMessage(utils.chuDe, thongbao, to=[tech.email]).send()
                     
         return redirect(self.get_success_url())
     
@@ -386,9 +318,9 @@ class CancelViewConfirm(View):
         client.services.clear()
         client.status = Khach.Status.cancel
         client.save()
-        cancelKhachVisit(client=client)
-        tinNhan = f"{tenSpa}\nYour appointment was canceled.\nOriginal details:\nDate: {client.day_comes}\nTime: {client.time_at}\nTechnician: {client.technician}"
-        EmailMessage(chuDe, tinNhan, to=[client.email]).send()
+        utils.cancelKhachVisit(client=client)
+        tinNhan = f"{utils.tenSpa}\nYour appointment was canceled.\nOriginal details:\nDate: {client.day_comes}\nTime: {client.time_at}\nTechnician: {client.technician}"
+        EmailMessage(utils.chuDe, tinNhan, to=[client.email]).send()
         messages.success(request, "Your services have been canceled successfully.")
         return redirect(self.get_success_url())
     
@@ -480,10 +412,10 @@ class ScheduleViewUser(LoginRequiredMixin, View):
         client.points = total_point
         client.save()
         form.instance = client
-        saveKhachVisit(client, day_comes, time_at, services, tech, status)
+        utils.saveKhachVisit(client, day_comes, time_at, services, tech, status)
         messages.success(request, f"{form.instance.full_name} was scheduled successfully!")
         thongbao = f"{form.instance.full_name} booked appointment with you on {form.instance.day_comes} at {form.instance.time_at} \nStatus: {form.instance.status}"
         if tech.email != None:
-            EmailMessage(chuDe, thongbao, to=[tech.email]).send()
+            EmailMessage(utils.chuDe, thongbao, to=[tech.email]).send()
         return redirect(self.success_url)
 

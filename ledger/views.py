@@ -16,21 +16,21 @@ import requests
 import os
 from django.db.models import Prefetch, F
 from django.views.decorators.http import require_POST
-from datHen.views import tenSpa, saveKhachVisit
+from . import utils
 from django.core.mail import EmailMessage
-import stripe
+# import stripe
 
-stripe.api_key = os.environ.get('stripe_secret_key')
-contactEmail = "hoadambutxinh@gmail.com"
+# stripe.api_key = os.environ.get('stripe_secret_key')
+
 
 class PrivacyPolicy(View):
     template = "privacy.html"
     def get(self, request):
-        context = {'spaName': tenSpa, "email": contactEmail}
+        context = {'spaName': utils.tenSpa, "email": utils.contactEmail}
         return render(request, self.template, context)
     
 class Contact(View):
-    receiveEmail = "jubivu@icloud.com"
+    receiveEmail = "signature.sandhill@gmail.com"
     template = "contact.html"
     def get(self, request):
         form = ContactForm()
@@ -148,17 +148,17 @@ class AddService(LoginRequiredMixin, View):
         ser.owner = self.request.user
         ser.save()
         #stripe product and service.stripe_product_id
-        product = stripe.Product.create(name=ser.service)
-        ser.stripe_product_id = product.id
-        ser.save()
+        # product = stripe.Product.create(name=ser.service)
+        # ser.stripe_product_id = product.id
+        # ser.save()
         
-        stripe_price = stripe.Price.create(
-            product=ser.stripe_product_id,
-            unit_amount=int(ser.price * 100), # convert to cents
-            currency='usd',
-        )
-        price = Price(service=ser, price=ser.price, stripe_price_id=stripe_price.id)
-        price.save()
+        # stripe_price = stripe.Price.create(
+        #     product=ser.stripe_product_id,
+        #     unit_amount=int(ser.price * 100), # convert to cents
+        #     currency='usd',
+        # )
+        # price = Price(service=ser, price=ser.price, stripe_price_id=stripe_price.id)
+        # price.save()
         form.save_m2m
         messages.success(request, f"{form.instance.service} was added successfully!")
         return redirect(self.success_url)
@@ -413,18 +413,18 @@ class CustomerVisit(View):
     feet = allService.filter(category="Pedicure")
     wax = allService.filter(category="Wax")
     eyelash = allService.filter(category="Eyelash Extensions")
-    allTech = Technician.objects.all().exclude(name="anyOne")
+    
 
     def get(self, request):
         complimentaries = Complimentary.objects.filter(is_available=True).order_by('category')
         today = timezone.now().date()
-        
+        allTech = Technician.objects.all().exclude(name="anyOne")
         context = {
             'nails': self.nail,
             'feets': self.feet,
             'waxs': self.wax,
             'mani': self.mani,
-            'allTech': self.allTech,
+            'allTech': allTech,
             'complimentaries': complimentaries,
             'eyelashs': self.eyelash,
             'today': today,
@@ -464,7 +464,7 @@ class ClientWalkinView(LoginRequiredMixin, CreateView):
         khach.services.set(dv)    
         form.instance = khach
         if not khach.today_visit:
-            saveKhachVisit(khach, ngay,thoigian,dv, khach.technician, KhachVisit.Status.anyone)
+            utils.saveKhachVisit(khach, ngay,thoigian,dv, khach.technician, KhachVisit.Status.anyone)
         messages.success(self.request, f"Welcom {form.instance.full_name} to our salon!")
         return super().form_valid(form)
 

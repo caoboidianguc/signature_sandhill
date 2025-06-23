@@ -17,3 +17,4 @@ django_bower
 requests
 certifi
 stripe
+python-dotenv

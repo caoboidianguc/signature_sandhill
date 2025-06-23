@@ -31,7 +31,7 @@
                 </a>
                 {% if mot.future_visit %}
                 <a href="{{ mot.get_cancel_url }}" class="btn btn-outline-danger btn-lg shadow-sm w-100 w-md-auto">
-                    <i class="bi bi-x-circle me-2"></i> Cancel Appointment
+                    <i class="bi bi-x-circle me-2"></i> Check or Cancel Appointment
                 </a>
                 {% endif %}
                 <a href="{% url 'ledger:iam_here' mot.pk %}" class="btn btn-outline-success btn-lg shadow-sm w-100 w-md-auto">

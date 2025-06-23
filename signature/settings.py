@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-81w87l+rc-3sv!!^dk=6cl)9@7pscwf*25+zhd(+43j3q_ttos
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.signaturesandhill.com' ]
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -165,8 +165,8 @@ EMAIL_BACKEND = 'datHen.custom_email_backend.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'hoadambutxinh@gmail.com'
-EMAIL_HOST_PASSWORD = 'seztdjfrcdbcykvp'
+EMAIL_HOST_USER = 'signature.sandhill@gmail.com'
+EMAIL_HOST_PASSWORD = 'uqnlgemxzabsviwq'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BOWER_INSTALLED_APPS = (

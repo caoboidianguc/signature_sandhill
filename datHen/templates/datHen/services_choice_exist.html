@@ -62,6 +62,52 @@
                         </p>
                         {% endif %}
                         {% endfor %}
+                        <h3>Eyelash Extensions</h3>
+                    {% for choice in form.dichvu.field.queryset %}
+                        {% if choice.category == "Eyelash Extensions" %}
+                        <p class="card-text">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                                    <span class="checkmark"></span>
+                                    {{ choice | title }}
+                                        
+                                </label>
+                            </div>
+                        </p>
+                        {% endif %}
+                    {% endfor %}
+                <h3>Wax</h3>
+                    {% for choice in form.dichvu.field.queryset %}
+                        {% if choice.category == "Wax" %}
+                        <p class="card-text">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                                    <span class="checkmark"></span>
+                                    {{ choice | title }}
+                                        
+                                </label>
+                            </div>
+                        </p>
+                        {% endif %}
+                    {% endfor %}
+                    <h3>Kid Services</h3>
+                    {% for choice in form.dichvu.field.queryset %}
+                        {% if choice.category == "Bayby" or choice.category == "Kid" %}
+                        <p class="card-text">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="dichvu" value="{{ choice.id }}" class="form-check-input">
+                                    <span class="checkmark"></span>
+                                    {{ choice | title }}
+                                        
+                                </label>
+                            </div>
+                        </p>
+                        {% endif %}
+                    {% endfor %}
+                    
                 
         </div>
               <input type='submit' onclick="window.location='{% url 'ledger:index' %}'; return false; " value='Back' class="btn btn-primary">

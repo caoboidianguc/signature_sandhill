@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+
+{% block heading %}
+    <title>Appointment Confirmation</title>
+{% endblock heading %}
+
+{% block content %}
+    <p>Dear {{ client.full_name |title }},</p>
+    <p>Thank you for booking with us!</p>
+    <p>Your appointment is set for:</p>
+    <ul>
+        <li><strong>Date:</strong> {{ client.day_comes }}</li>
+        <li><strong>Time:</strong> {{ client.time_at }}</li>
+        <li><strong>Technician:</strong> {{ client.technician |title }}</li>
+    </ul>
+    <p>Need to change anything? </p>
+    <p>
+    <a href="{{ cancel_link }}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Cancel Appointment</a>
+    </p>
+{% endblock content %}

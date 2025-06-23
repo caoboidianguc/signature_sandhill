@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .env
 ghichu.txt
+db.sqlite3

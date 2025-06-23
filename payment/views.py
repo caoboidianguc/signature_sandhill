@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from ledger.views import contactEmail
+from ledger import utils
 from datetime import datetime
 from django.utils import timezone
 
@@ -77,7 +77,7 @@ class SuccessCheckoutView(TemplateView):
             email = EmailMessage(
                 subject='Payment Confirmation',
                 body=body,
-                from_email=contactEmail,
+                from_email=utils.contactEmail,
                 to=[client_email],
             )
             email.content_subtype = 'html'
@@ -168,7 +168,7 @@ def fulfill_checkout(session):
     email = EmailMessage(
         subject='Payment Confirmation',
         body=body,
-        from_email=contactEmail,
+        from_email=utils.contactEmail,
         to=[client_email],
     )
     email.content_subtype = 'html'
