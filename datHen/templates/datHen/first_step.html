@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 
 
 {% block nutChinh %}
@@ -27,15 +27,12 @@
             {% for employee in allTech %}
           <div class="col">
             <a href="{{ employee.get_absolute_url }}" id="tech-item" class="text-decoration-none link-offset-2 link-underline link-underline-opacity-0">
-                {% if employee.picture %}
-                    <img src="{{ employee.picture.url }}" alt="{{ employee.name }}" style="width: 120px; height: 120px; object-fit: cover; " id="tech-pic">
-                    {% else %}
-                    <img src="{{ STATIC_URL }}path/to/default-image.jpg" alt="No Image" style="width: 50px; height: 50px;" id="tech-pic">
-                {% endif %}
+                
+                <img src="{% if employee.picture %} {{ employee.picture.url }} {% else %} {% static 'ledger/images/person.jpg' %} {% endif %}" class="card-img-top" alt="{{ employee.name }}"style="width: 120px; height: 120px; object-fit: cover; " id="tech-pic">
+                    
                 <div id="tech-name">{{ employee.name | title }} </div>
                 {% if employee.still_vacation %}
                     <div class="text-danger">On vacation from {{ employee.vacation_start }} <br>to {{ employee.vacation_end }}</div>
-                
                 {% endif %}
             </a>
             </div>

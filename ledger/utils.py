@@ -2,6 +2,8 @@ from .models import KhachVisit
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+import logging
+
 
 contactEmail = "signature.sandhill@gmail.com"
 chuDe = "Signature Nails Sandhill Confirm schedule"
@@ -28,21 +30,27 @@ def cancelKhachVisit(client):
         print(f"Error retrived visit: {e}")
         return
 
+logging.getLogger(__name__)
+
 def sendEmailConfirmation(request, client):
-    email_body = {
-                'client': client,
-                'cancel_link': cancel_visit(request, client.id),
-                
-            }
-    body = render_to_string('datHen/email_confirm_dathen.html', email_body)
-    email = EmailMessage(
-        subject='Appointment Confirmation',
-        body=body,
-        from_email=contactEmail,
-        to=[client.email],
-    )
-    email.content_subtype = 'html'
-    email.send()
+    try:
+        email_body = {
+                    'client': client,
+                    'cancel_link': cancel_visit(request, client.id),
+                    
+                }
+        body = render_to_string('datHen/email_confirm_dathen.html', email_body)
+        email = EmailMessage(
+            subject='Appointment Confirmation',
+            body=body,
+            from_email=contactEmail,
+            to=[client.email],
+        )
+        email.content_subtype = 'html'
+        email.send()
+        logging.info(f"Email sent to {client.email} for appointment confirmation.")
+    except Exception as e:
+        logging.error(f"Error sending email to {client.email}: {str(e)}")
 
 def cancel_visit(request, id):
     url = reverse_lazy('datHen:cancel_confirm', kwargs={'pk': id})

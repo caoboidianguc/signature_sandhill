@@ -26,10 +26,6 @@
     }
 }
 
-.cursive-text {
-    font-family: 'cursive', sans-serif;
-}
-
 .overflow-auto {
     overflow-x: auto;
     white-space: nowrap;

@@ -66,7 +66,7 @@
         <div class="col-md-3 mb-4 px-2">
             <a class="nav-link" href="{% url 'ledger:employee_bio' tech.id %}">
             <div class="card h-100" style="width: 18rem;">
-                <img src="{{ tech.picture }}" class="card-img-top" alt="{{ tech.name }}" style="height: 200px; object-fit: cover;">
+                <img src="{% if tech.picture %} {{ tech.picture.url }} {% else %} {% static 'ledger/images/person.jpg' %} {% endif %}" class="card-img-top" alt="{{ tech.name }}" style="height: 200px; object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ tech.name | title }}</h5>
                     <p class="card-text"><small class="text-muted">Experience: {{ tech.get_experience }} years</small></p>
