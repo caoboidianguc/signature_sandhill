@@ -263,6 +263,7 @@ class KhachVisit(models.Model):
     status = models.CharField(choices=Status.choices, max_length=20, default=Status.online, help_text="Choose anyone as an alternate!")
     day_comes = models.DateField()
     time_at = models.TimeField()
+    isPaid = models.BooleanField(default=False, help_text="Has the client paid for this visit?")
     total_spent = models.DecimalField(max_digits=7, decimal_places=2, editable=False, null=True)
     
     class Meta:
